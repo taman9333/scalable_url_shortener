@@ -2,6 +2,9 @@ GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.2.0)
+    bson (5.0.1)
+    mongo (2.20.1)
+      bson (>= 4.14.1, < 6.0.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     rack (3.1.7)
@@ -27,6 +30,7 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
+  mongo
   rackup (~> 2.1)
   sinatra
 
