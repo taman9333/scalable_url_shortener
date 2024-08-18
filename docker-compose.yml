@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  url-shortener:
+  url-shortener-1:
     build: .
     volumes:
       - .:/url_shortener
@@ -9,13 +9,14 @@ services:
       - "9292:9292"
     depends_on:
       - mongo
-      - etcd
+      - etcd-1
+      - etcd-2
+      - etcd-3
     environment:
       MONGO_URL: "mongodb://mongo:27017/url_shortener"
-      ETCD_URL: "http://etcd:2379"
-      ETCD_HOST: "etcd"
+      ETCD_URL: "http://etcd-1:2379, http://etcd-2:2379, http://etcd-3:2379"
 
-  url-shortener2:
+  url-shortener-2:
     build: .
     volumes:
       - .:/url_shortener
@@ -23,11 +24,12 @@ services:
       - "9293:9292"
     depends_on:
       - mongo
-      - etcd
+      - etcd-1
+      - etcd-2
+      - etcd-3
     environment:
       MONGO_URL: "mongodb://mongo:27017/url_shortener"
-      ETCD_URL: "http://etcd:2379"
-      ETCD_HOST: "etcd"
+      ETCD_URL: "http://etcd-1:2379, http://etcd-2:2379, http://etcd-3:2379"
 
   mongo:
     image: mongo:4.4
@@ -36,11 +38,44 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  etcd:
+  etcd-1:
     image: quay.io/coreos/etcd:v3.4.13
+    entrypoint: /usr/local/bin/etcd
     ports:
       - "2379:2379"
-    command: /usr/local/bin/etcd --advertise-client-urls http://0.0.0.0:2379 --listen-client-urls http://0.0.0.0:2379
+    command:
+      - '--name=etcd-1'
+      - '--initial-advertise-peer-urls=http://etcd-1:2380'
+      - '--listen-peer-urls=http://0.0.0.0:2380'
+      - '--listen-client-urls=http://0.0.0.0:2379'
+      - '--advertise-client-urls=http://etcd-1:2379'
+      - '--initial-cluster=etcd-1=http://etcd-1:2380,etcd-2=http://etcd-2:2380,etcd-3=http://etcd-3:2380'
+
+  etcd-2:
+    image: quay.io/coreos/etcd:v3.4.13
+    entrypoint: /usr/local/bin/etcd
+    ports:
+      - "2378:2379"
+    command:
+      - '--name=etcd-2'
+      - '--initial-advertise-peer-urls=http://etcd-2:2380'
+      - '--listen-peer-urls=http://0.0.0.0:2380'
+      - '--listen-client-urls=http://0.0.0.0:2379'
+      - '--advertise-client-urls=http://etcd-2:2379'
+      - '--initial-cluster=etcd-1=http://etcd-1:2380,etcd-2=http://etcd-2:2380,etcd-3=http://etcd-3:2380'
+
+  etcd-3:
+    image: quay.io/coreos/etcd:v3.4.13
+    entrypoint: /usr/local/bin/etcd
+    ports:
+      - "2376:2379"
+    command:
+      - '--name=etcd-3'
+      - '--initial-advertise-peer-urls=http://etcd-3:2380'
+      - '--listen-peer-urls=http://0.0.0.0:2380'
+      - '--listen-client-urls=http://0.0.0.0:2379'
+      - '--advertise-client-urls=http://etcd-3:2379'
+      - '--initial-cluster=etcd-1=http://etcd-1:2380,etcd-2=http://etcd-2:2380,etcd-3=http://etcd-3:2380'
 
 volumes:
   mongo-data:
