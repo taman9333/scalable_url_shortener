@@ -15,6 +15,7 @@ services:
     environment:
       MONGO_URL: "mongodb://mongo:27017/url_shortener"
       ETCD_URL: "http://etcd-1:2379, http://etcd-2:2379, http://etcd-3:2379"
+      SERVICE_NAME: url-shortener-1
 
   url-shortener-2:
     build: .
@@ -30,6 +31,7 @@ services:
     environment:
       MONGO_URL: "mongodb://mongo:27017/url_shortener"
       ETCD_URL: "http://etcd-1:2379, http://etcd-2:2379, http://etcd-3:2379"
+      SERVICE_NAME: url-shortener-2
 
   mongo:
     image: mongo:4.4

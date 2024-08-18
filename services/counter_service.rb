@@ -28,7 +28,7 @@ class CounterService
     private
 
     attr_accessor :counter_range, :counter
-    attr_reader :counter_mutex, :instance_id
+    attr_reader :counter_mutex
 
     def initialize_counter_range
       self.counter_range = get_counter_range
@@ -57,7 +57,7 @@ class CounterService
         end
 
         if txn.succeeded
-          puts "Instance #{instance_id} obtained counter range #{current_value} to #{new_value - 1}"
+          puts "Instance #{ENV['SERVICE_NAME']} obtained counter range #{current_value} to #{new_value - 1}"
           return (current_value...new_value)
         end
       end
@@ -65,10 +65,6 @@ class CounterService
 
     def counter_mutex
       @counter_mutex ||= Mutex.new
-    end
-
-    def instance_id
-      @instance_id ||= SecureRandom.uuid
     end
   end
 end

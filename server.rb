@@ -28,3 +28,8 @@ get '/:short_url' do
   halt 404, 'URL not found' unless url_doc
   redirect url_doc[:original_url]
 end
+
+# for testing purposes
+delete '/delete_key' do
+  ETCD_CLIENT.del(COUNTER_KEY)
+end
