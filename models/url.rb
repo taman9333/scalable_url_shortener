@@ -1,3 +1,5 @@
+require_relative '../initializers/mongo'
+
 class Url
   def self.find_by_short_url(short_url)
     URLS_COLLECTION.find(short_url: short_url).first

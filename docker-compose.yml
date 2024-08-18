@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  url-shortener:
+    build: .
+    volumes:
+      - .:/url_shortener
+    ports:
+      - "9292:9292"
+    depends_on:
+      - mongo
+      - etcd
+    environment:
+      MONGO_URL: "mongodb://mongo:27017/url_shortener"
+      ETCD_URL: "http://etcd:2379"
+      ETCD_HOST: "etcd"
+
+  url-shortener2:
+    build: .
+    volumes:
+      - .:/url_shortener
+    ports:
+      - "9293:9292"
+    depends_on:
+      - mongo
+      - etcd
+    environment:
+      MONGO_URL: "mongodb://mongo:27017/url_shortener"
+      ETCD_URL: "http://etcd:2379"
+      ETCD_HOST: "etcd"
+
+  mongo:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  etcd:
+    image: quay.io/coreos/etcd:v3.4.13
+    ports:
+      - "2379:2379"
+    command: /usr/local/bin/etcd --advertise-client-urls http://0.0.0.0:2379 --listen-client-urls http://0.0.0.0:2379
+
+volumes:
+  mongo-data:

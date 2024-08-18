@@ -3,6 +3,14 @@ GEM
   specs:
     base64 (0.2.0)
     bson (5.0.1)
+    etcdv3 (0.11.6)
+      grpc (~> 1.17)
+    google-protobuf (3.15.8)
+    googleapis-common-protos-types (1.7.0)
+      google-protobuf (~> 3.14)
+    grpc (1.40.0)
+      google-protobuf (~> 3.15)
+      googleapis-common-protos-types (~> 1.0)
     mongo (2.20.1)
       bson (>= 4.14.1, < 6.0.0)
     mustermann (3.0.0)
@@ -27,9 +35,12 @@ GEM
     webrick (1.8.1)
 
 PLATFORMS
+  aarch64-linux
   arm64-darwin-23
 
 DEPENDENCIES
+  etcdv3
+  google-protobuf (~> 3.15.0)
   mongo
   rackup (~> 2.1)
   sinatra
