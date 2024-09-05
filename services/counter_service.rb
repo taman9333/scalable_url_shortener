@@ -19,7 +19,6 @@ class CounterService
       # mutex ensures that only one thread can modify the counter at a time,
       # maintaining the integrity and uniqueness of assigned counter values.
       counter_mutex.synchronize do
-        initialize_counter_range if counter_range.nil?
         current_counter = counter
         if current_counter >= counter_range.last
           self.counter_range = get_counter_range
