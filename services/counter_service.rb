@@ -7,13 +7,19 @@ class CounterService
   RANGE_SIZE = 1000
 
   class << self
-    def get_next_counter
-      initialize_counter_range if counter_range.nil?
+    # This method will be called only once during server boot-up (in config.ru)
+    # to pre-initialize the counter range before handling any requests.
+    def initialize_counter_range
+      self.counter_range = get_counter_range
+      self.counter = counter_range.first
+    end
 
+    def get_next_counter
       # Mutex prevents race conditions in a multi-threaded web server environment,
-      # it mutex ensures that only one thread can modify the counter at a time,
+      # mutex ensures that only one thread can modify the counter at a time,
       # maintaining the integrity and uniqueness of assigned counter values.
       counter_mutex.synchronize do
+        initialize_counter_range if counter_range.nil?
         current_counter = counter
         if current_counter >= counter_range.last
           self.counter_range = get_counter_range
@@ -29,11 +35,6 @@ class CounterService
 
     attr_accessor :counter_range, :counter
     attr_reader :counter_mutex
-
-    def initialize_counter_range
-      self.counter_range = get_counter_range
-      self.counter = counter_range.first
-    end
 
     def get_counter_range
       loop do

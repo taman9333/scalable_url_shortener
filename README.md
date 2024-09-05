@@ -8,5 +8,5 @@ To run app locally you have to use [Docker Compose](https://docs.docker.com/comp
 
 ```bash
 docker-compose up url-shortener-1 # first instance runs on Port 9292
-docker-compose up url-shortener-1 # second instance runs on Port 9293
+docker-compose up url-shortener-2 # second instance runs on Port 9293
 ```
