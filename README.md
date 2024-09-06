@@ -17,7 +17,7 @@ Those commands will also run a 3-Node etcd Cluster, and MongoDB.
 
 You can send requests to either first instance(port 9292) or second instance(port 9293) to shorten a url
 
-``bash
+```bash
 curl -X POST localhost:9292/shorten -d "url=https://www.test1.com" # shorten the url using first instance
 curl -X POST localhost:9293/shorten -d "url=https://www.test2.com" # shorten the url using second instance
 ```
