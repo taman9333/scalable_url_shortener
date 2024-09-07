@@ -8,7 +8,12 @@ get '/' do
 end
 
 post '/shorten' do
-  url = params[:url]
+  begin
+    request_payload = JSON.parse(request.body.read)
+    url = request_payload['url']
+  rescue JSON::ParserError
+    halt 400, 'Invalid JSON format'
+  end
 
   halt 400, 'URL is required' unless url
 
@@ -31,5 +36,5 @@ end
 
 # for testing purposes
 delete '/delete_key' do
-  ETCD_CLIENT.del(COUNTER_KEY)
+  Etcd.client.del(COUNTER_KEY)
 end

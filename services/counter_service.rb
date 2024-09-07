@@ -37,7 +37,7 @@ class CounterService
 
     def get_counter_range
       loop do
-        current_value = ETCD_CLIENT.get(COUNTER_KEY).kvs.first&.value.to_i
+        current_value = Etcd.client.get(COUNTER_KEY).kvs.first&.value.to_i
         new_value = current_value + RANGE_SIZE
 
         # Distributed counter allocation using ETCD's transactional operations:
@@ -47,7 +47,7 @@ class CounterService
         # 4. This ensures that even in a distributed environment with multiple server instances,
         #    we maintain a consistent and collision-free counter allocation.
         # 5. If the transaction fails, the loop will retry, reading the new current value.
-        txn = ETCD_CLIENT.transaction do |txn|
+        txn = Etcd.client.transaction do |txn|
           txn.compare = [
             txn.value(COUNTER_KEY, :equal, current_value.to_s),
           ]

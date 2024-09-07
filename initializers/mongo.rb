@@ -1,3 +1,7 @@
 require_relative '../config/database'
 
-URLS_COLLECTION = MONGO_CLIENT[:urls]
+module Collections
+  def self.urls
+    MongoDB.client[:urls]
+  end
+end
