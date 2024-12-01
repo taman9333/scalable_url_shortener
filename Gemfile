@@ -9,6 +9,7 @@ group :preload do
   gem 'etcdv3'
   gem 'google-protobuf', '~> 3.15.0'
   gem 'falcon'
+  gem 'rack-cors', require: 'rack/cors'
 end
 
 group :development, :test do

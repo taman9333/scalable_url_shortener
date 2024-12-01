@@ -84,6 +84,8 @@ GEM
       protocol-http (~> 0.43)
       rack (>= 1.0)
     rack (3.1.7)
+    rack-cors (2.0.2)
+      rack (>= 2.0.0)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0, < 4)
@@ -128,6 +130,7 @@ DEPENDENCIES
   falcon
   google-protobuf (~> 3.15.0)
   mongo
+  rack-cors
   rackup (~> 2.1)
   rspec
   sinatra
