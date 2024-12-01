@@ -16,4 +16,4 @@ EXPOSE 9292
 
 ENTRYPOINT ["/url_shortener/entrypoint.sh"]
 
-CMD ["bundle", "exec", "rackup", "--host", "0.0.0.0"]
+CMD ["bundle", "exec", "falcon", "serve", "--bind", "tcp://0.0.0.0:9292"]

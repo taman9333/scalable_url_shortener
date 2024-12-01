@@ -16,6 +16,15 @@ services:
       MONGO_URL: "mongodb://mongo:27017/url_shortener"
       ETCD_URL: "http://etcd-1:2379, http://etcd-2:2379, http://etcd-3:2379"
       SERVICE_NAME: url-shortener-1
+    # as depends_on does not wait for db to be ready before starting api, only until it has been started
+    command: >
+      sh -c "
+        while ! curl -s mongo:27017 >/dev/null; do
+          echo 'MongoDB is unavailable - sleeping';
+          sleep 1;
+        done;
+        echo 'MongoDB is up - executing command';
+        bundle exec falcon serve --bind tcp://0.0.0.0:9292"
 
   url-shortener-2:
     build: .
@@ -32,6 +41,15 @@ services:
       MONGO_URL: "mongodb://mongo:27017/url_shortener"
       ETCD_URL: "http://etcd-1:2379, http://etcd-2:2379, http://etcd-3:2379"
       SERVICE_NAME: url-shortener-2
+    # as depends_on does not wait for db to be ready before starting api, only until it has been started
+    command: >
+      sh -c "
+        while ! curl -s mongo:27017 >/dev/null; do
+          echo 'MongoDB is unavailable - sleeping';
+          sleep 1;
+        done;
+        echo 'MongoDB is up - executing command';
+        bundle exec falcon serve --bind tcp://0.0.0.0:9292"
 
   mongo:
     image: mongo:4.4
